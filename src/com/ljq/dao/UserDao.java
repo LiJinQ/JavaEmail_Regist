@@ -10,6 +10,7 @@ import com.ljq.util.DBCPUtil;
 
 public class UserDao {
 	public void newUser(User user) {
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
