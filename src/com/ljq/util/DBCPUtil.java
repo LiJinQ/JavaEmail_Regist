@@ -30,6 +30,9 @@ public class DBCPUtil {
 	public static Connection getConnection() throws SQLException {
 		return ds.getConnection();
 	}
+	public static DataSource getDataSource() {
+		return ds;
+	}
 	
 	public static void release(Connection conn,Statement st,ResultSet rs){
         if(rs!=null){

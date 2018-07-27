@@ -5,10 +5,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+
 import com.ljq.po.User;
 import com.ljq.util.DBCPUtil;
 
 public class UserDao {
+	private QueryRunner queryRunner=null;
+	
+	
+	public UserDao() {
+		super();
+		// TODO Auto-generated constructor stub
+		queryRunner = new QueryRunner(DBCPUtil.getDataSource());
+	}
+	public void newUserByDbutil(User user) {
+		String sql = "insert into user(username,password,email,code,status) values(?,?,?,?,?)";
+		try {
+			queryRunner.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getCode(),user.getStatus());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void newUser(User user) {
 		
 		Connection conn = null;
@@ -32,6 +53,15 @@ public class UserDao {
 		}
 	}
 	
+	public void updateUserByDbutil(User user) {
+		String sql = "update user set username=?,password=?,email=?,code=?,status=? where id=?";
+		try {
+			queryRunner.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getCode(),user.getStatus(),user.getId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void updateUser(User user) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -55,6 +85,18 @@ public class UserDao {
 		}
 	}
 	
+	public User getUserByUserNameByDbutil(String username) {
+		String sql = "select * from user where username='"+username+"'";
+		User user = null;
+		try {
+			user = new User();
+			user = queryRunner.query(sql,new BeanHandler<User>(User.class));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
+	}
 	public User getUserByUserName(String username) {
 		User user = null;
 		Connection conn = null;
@@ -83,6 +125,18 @@ public class UserDao {
 		return user;
 	}
 	
+	public User getUserByCodeByDbutil(String code) {
+		String sql = "select * from user where code='"+code+"'";
+		User user = null;
+		try {
+			user = new User();
+			user = queryRunner.query(sql, new BeanHandler<User>(User.class));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
+	}
 	public User getUserByCode(String code) {
 		User user = null;
 		Connection conn = null;
